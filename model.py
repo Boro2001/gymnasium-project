@@ -73,7 +73,7 @@ class Model:
     def play_game_without_learning(self, n = 3):
         self.agent.env = self.env
         for episode in range(n):
-            obs, info = self.reset()
+            obs, info = self.env.reset()
             done = False
             clear_output()
 
