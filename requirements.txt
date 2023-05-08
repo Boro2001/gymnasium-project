@@ -1,0 +1,3 @@
+gymnasium
+gymnasium[box2d]
+pygame
