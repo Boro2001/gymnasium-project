@@ -11,7 +11,7 @@ from model import Model
 learning_rate = 0.3
 n_episodes = 10000
 start_epsilon = 1.0
-epsilon_decay = start_epsilon / (n_episodes / 2)  # reduce the exploration over time
+epsilon_decay = start_epsilon / ((n_episodes) / 2)  # reduce the exploration over time
 final_epsilon = 0.1
 is_slippery = True
 
@@ -21,9 +21,10 @@ env2 = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=is_slipp
 env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=is_slippery,render_mode="ansi").env
 env = gym.wrappers.RecordEpisodeStatistics(env, deque_size=n_episodes)
 
-model = Model(env)
+model = Model(env, n_episodes, learning_rate, start_epsilon, epsilon_decay, final_epsilon)
 model.train_model()
 model.wypisz_ruchy(4)
+model.env = env2
 model.play_game_without_learning(2)
 
 

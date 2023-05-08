@@ -32,25 +32,31 @@ class Model:
             print(episode)
             # play one episode and get the stats about it
             number_of_steps = 0
+            punkty = 0
             while not done:
                 action = self.agent.get_action(self.obs)
                 next_obs, reward, terminated, truncated, info = self.env.step(action)
-                self.agent.update(self.obs, action, reward, terminated, next_obs)
-                print("is terminated " + str(terminated))
-                print("is truncated " + str(truncated))
+
+                punkty = reward
+                self.agent.update(self.obs, action, punkty, terminated, next_obs)
+
+                #print("is terminated " + str(terminated))
+                #print("is truncated " + str(truncated))
                 number_of_steps = number_of_steps + 1
-                print("number of steps" + str(number_of_steps))
+                #print("number of steps" + str(number_of_steps))
+
                 done = terminated or truncated
-                obs = next_obs
-                print(self.agent.q_values)
+                self.obs = next_obs
+                
             self.agent.decay_epsilon()
             episode_steps.append(number_of_steps)
+            #episode_steps.append(punkty)
 
         plt.plot(range(self.n_episodes), episode_steps)
         plt.xlabel("Episode Number")
         plt.ylabel("Number of Steps")
         plt.title("Number of Steps per Episode")
-        plt.savefig("charts/" + str(datetime.datetime.now()) + "steps_per_episode.png")
+        plt.savefig("charts/" + str(int(datetime.datetime.timestamp(datetime.datetime.now()))) + "steps_per_episode.png")
         plt.show()
         print(self.agent.q_values)
 
