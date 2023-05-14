@@ -1,32 +1,19 @@
-import gymnasium as gym
-from gymnasium.envs.toy_text.frozen_lake import generate_random_map
-from IPython.display import clear_output
-from matplotlib import pyplot as plt
-import numpy as np
+from pettingzoo.sisl import pursuit_v4
 
-from agent import Agent
-from model import Model
+pursuit_v4.env(max_cycles=500, x_size=16, y_size=16, shared_reward=True, n_evaders=30,
+n_pursuers=8,obs_range=7, n_catch=2, freeze_evaders=False, tag_reward=0.01,
+catch_reward=5.0, urgency_reward=-0.1, surround=True, constraint_window=1.0)
 
-# hyperparameters
-learning_rate = 0.3
-n_episodes = 10000
-start_epsilon = 1.0
-epsilon_decay = start_epsilon / ((n_episodes) / 2)  # reduce the exploration over time
-final_epsilon = 0.1
-is_slippery = True
-
-# enviroments
-env2 = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=is_slippery, render_mode="human").env
-#env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True,render_mode="rgb_array").env
-env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=is_slippery,render_mode="ansi").env
-env = gym.wrappers.RecordEpisodeStatistics(env, deque_size=n_episodes)
-
-model = Model(env, n_episodes, learning_rate, start_epsilon, epsilon_decay, final_epsilon)
-model.train_model()
-model.wypisz_ruchy(4)
-model.env = env2
-model.play_game_without_learning(2)
-
-
-
-
+env = pursuit_v4.env(render_mode="human")
+env.reset()
+for agent in env.agent_iter():
+    observation, reward, termination, truncation, info = env.last()
+    print(reward)
+    print(observation)
+    print(info)
+    if termination or truncation:
+        action = None
+    else:
+        action = env.action_space(agent).sample()
+    env.step(action)
+env.close()

@@ -1,3 +1,4 @@
 gymnasium
 gymnasium[box2d]
-pygame
+pymunk
+pettingzoo[sisl]==1.22.3
